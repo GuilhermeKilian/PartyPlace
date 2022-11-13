@@ -9,11 +9,8 @@ import { Event } from '../models/event'
 })
 export class EventService {
 
-  public dbEvent: Observable<Event[]>;
-
   constructor(private db:AngularFireDatabase ) 
   { 
-    this.dbEvent = this.getAllEvents();
   }
 
   public getAllEvents():Observable<Event[]>{

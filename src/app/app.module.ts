@@ -20,7 +20,7 @@ import { environment } from 'src/environments/environment';
     AppRoutingModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),  
+    AngularFireModule.initializeApp(environment.firebaseConfig),
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
