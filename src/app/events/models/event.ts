@@ -5,7 +5,7 @@ export class Event {
     latitude: bigint;
     address: string;
     details: string;
-    
+
     constructor(key: string, name: string, longitude: bigint, latitude: bigint, address: string, details: string) {
         this.key = key;
         this.name = name;
@@ -14,5 +14,4 @@ export class Event {
         this.address = address;
         this.details = details;      
     }
-
  }
