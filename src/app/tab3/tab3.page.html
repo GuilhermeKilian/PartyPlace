@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      Cadastro
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +9,43 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
+      <ion-title size="large">Cadastrar Evento</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <form [formGroup]="this.form" (ngSubmit)="create(form)">
+    <ion-item>
+      <ion-label>Nome</ion-label>
+      <ion-input type="text" formControlName="name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Endereço</ion-label>
+      <ion-input type="text" formControlName="address"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Latitude</ion-label>
+      <ion-input type="text" formControlName="latitude"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Longitude</ion-label>
+      <ion-input type="text" formControlName="longitude"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Detalhes</ion-label>
+      <ion-textarea formControlName="details"></ion-textarea>
+    </ion-item>
+    <ion-button ion-button type="submit" [disabled]="!form.valid">Criar</ion-button>
+  </form>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let event of events">
+        <p>{{event.name}}</p>
+        <!-- <ion-button (click)='(event.key)'>edit</ion-button> -->
+        <ion-button (click)='deleteEvent(event.key)'>Remover</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- <app-explore-container name="Tab 3 page"></app-explore-container> -->
 </ion-content>
