@@ -1,32 +1,29 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { GoogleMap } from '@capacitor/google-maps';
-
+import { Geolocation, Geoposition } from '@awesome-cordova-plugins/geolocation/ngx';
 @Injectable({
   providedIn: 'root'
 })
+
 export class MapsService {
+  
+  constructor(private geolocation:Geolocation) { }
 
-  apiKey:string = environment.agmKey;
-
-  constructor() { }
-
-  async buildMap(lat:number, lng:number, zoom:number = 8) : Promise<void>{
-
-    const mapRef = document.getElementById('map');
-
-    await GoogleMap.create({
-      id: 'my-map', // Unique identifier for this map instance
-      element: mapRef, // reference to the capacitor-google-map element
-      apiKey: this.apiKey, // Your Google Maps API Key
+  async createMap(elementName:string):Promise<GoogleMap> {
+    const mapRef = document.getElementById(elementName);
+    let position:Geoposition = await this.geolocation.getCurrentPosition();
+    return GoogleMap.create({
+      id: 'my-cool-map',
+      element: mapRef,
+      apiKey: environment.agmKey,
       config: {
         center: {
-          // The initial position to be rendered by the map
-          lat: lat,
-          lng: lng,
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         },
-        zoom: zoom, // The initial zoom level to be rendered by the map
+        zoom: 15,
       },
-    });    
+    });
   }
 }

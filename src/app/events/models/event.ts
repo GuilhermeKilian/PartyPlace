@@ -1,8 +1,8 @@
 export class Event {
     key: string;
     name: string;
-    longitude: bigint;
-    latitude: bigint;
+    longitude: number;
+    latitude: number;
     address: string;
     details: string;
  }

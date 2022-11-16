@@ -17,16 +17,12 @@ export class EventService {
     return this.db.list<Event>('event').valueChanges();      
   }
 
-  public getPersonalEvents(): Event[]{
-    let events: Event[] = Array<Event>();
-    this.db.list<Event>('event').snapshotChanges().subscribe(snap => snap.forEach(s => events.push(this.convertToEvent(s))));
-    return events;
+  public getPersonalEvents(): Observable<SnapshotAction<Event>[]>{
+    return this.db.list<Event>('event').snapshotChanges();
   }
 
-  public getEventByKey(key:string):Event{
-    let event:Event;
-    this.db.object<Event>(`event/${key}`).snapshotChanges().subscribe(snap => { event = this.convertToEvent(snap) })
-    return event;
+  public getEventByKey(key:string):Observable<SnapshotAction<Event>>{
+    return this.db.object<Event>(`event/${key}`).snapshotChanges()
   }
 
   public createEvent(event:CreateEvent):void{
@@ -49,7 +45,7 @@ export class EventService {
       event.key = snap.key;
       event.latitude = values.latitude;
       event.longitude = values.longitude;
-      event.name = values.address;
+      event.name = values.name;
       return event;
   }
 }

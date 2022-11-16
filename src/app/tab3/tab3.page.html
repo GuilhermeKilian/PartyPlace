@@ -39,13 +39,36 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let event of events">
-        <p>{{event.name}}</p>
-        <!-- <ion-button (click)='(event.key)'>edit</ion-button> -->
+      <ion-col *ngFor="let event of events | async">
+        <p>{{event.payload.val().name}}</p>
+        <ion-button (click)='populateUpdateForm(event.payload.val(), event.key)'>edit</ion-button>
         <ion-button (click)='deleteEvent(event.key)'>Remover</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
 
+  <form [formGroup]="this.update" (ngSubmit)="updateEvent(this.update)">
+    <ion-item>
+      <ion-label>Nome</ion-label>
+      <ion-input type="text" formControlName="name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Endereço</ion-label>
+      <ion-input type="text" formControlName="address"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Latitude</ion-label>
+      <ion-input type="text" formControlName="latitude"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Longitude</ion-label>
+      <ion-input type="text" formControlName="longitude"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Detalhes</ion-label>
+      <ion-textarea formControlName="details"></ion-textarea>
+    </ion-item>
+    <ion-button ion-button type="submit" [disabled]="!form.valid">Salvar</ion-button>
+  </form>
   <!-- <app-explore-container name="Tab 3 page"></app-explore-container> -->
 </ion-content>
