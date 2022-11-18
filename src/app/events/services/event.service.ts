@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Event } from '../models/event'
 import { CreateEvent } from '../models/createEvent';
+import { PlacesService } from '../../maps/places.service'
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { CreateEvent } from '../models/createEvent';
 
 export class EventService {
 
-  constructor(private db:AngularFireDatabase ) {}
+  constructor(private db:AngularFireDatabase, private place: PlacesService) {}
 
   public getAllEvents():Observable<Event[]>{
     return this.db.list<Event>('event').valueChanges();      
@@ -26,7 +27,12 @@ export class EventService {
   }
 
   public createEvent(event:CreateEvent):void{
-    this.db.list('event').push(event);
+    this.place.getPlace(event.address).subscribe(place => {
+      debugger;
+      event.latitude = place.candidates[0].geometry.lat;
+      event.longitude = place.candidates[0].geometry.lng;
+      this.db.list('event').push(event);
+    })
   }
 
   public updateEvent(key:string, event:Event):void{

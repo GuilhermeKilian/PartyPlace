@@ -9,8 +9,6 @@ import { SnapshotAction } from '@angular/fire/compat/database';
 export interface EventForm{
     key: FormControl<string>;
     name: FormControl<string>;
-    longitude: FormControl<number>;
-    latitude: FormControl<number>;
     address: FormControl<string>;
     details: FormControl<string>;
 }
@@ -50,8 +48,6 @@ export class Tab3Page {
       address: new FormControl('', {nonNullable: true}),
       details: new FormControl('', {nonNullable: false}),
       key: new FormControl('', {nonNullable: false}),
-      latitude: new FormControl<number>(0, {nonNullable: true}),
-      longitude: new FormControl<number>(0, {nonNullable: true}),
       name: new FormControl('', {nonNullable: true}),
     })
   }
@@ -61,8 +57,6 @@ export class Tab3Page {
       address: new FormControl(eventForm.address, {nonNullable: true}),
       details: new FormControl(eventForm.details, {nonNullable: false}),
       key: new FormControl(key, {nonNullable: false}),
-      latitude: new FormControl<number>(eventForm.latitude, {nonNullable: true}),
-      longitude: new FormControl<number>(eventForm.longitude, {nonNullable: true}),
       name: new FormControl(eventForm.name, {nonNullable: true}),
     })  
   }
@@ -72,8 +66,6 @@ export class Tab3Page {
     event.name = eventForm.value.name;
     event.address = eventForm.value.address;
     event.details = eventForm.value.details;
-    event.latitude = eventForm.value.latitude;
-    event.longitude = eventForm.value.longitude;
     return event;
   }
 }

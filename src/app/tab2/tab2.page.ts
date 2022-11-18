@@ -1,11 +1,7 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { GoogleMap } from '@capacitor/google-maps';
-import { environment } from 'src/environments/environment';
+import { PlacesService } from '../maps/places.service';
 import { MapsService } from '../maps/services/maps.service';
-import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
-import { Geoposition } from '@awesome-cordova-plugins/geolocation';
-
-
 
 @Component({
   selector: 'app-tab2',
@@ -16,9 +12,17 @@ import { Geoposition } from '@awesome-cordova-plugins/geolocation';
 export class Tab2Page {
     newMap: GoogleMap;
 
-    constructor(private maps:MapsService, private geolocation:Geolocation) {}
+    constructor(private maps:MapsService, private places:PlacesService) {}
 
+    ngOnInit(): void{
+        this.summonMap();
+        this.putMarkers();
+    }
     async summonMap(){
       this.newMap = await this.maps.createMap('map')
+    }
+
+    async putMarkers(){
+      this.maps.addMarkers();
     }
 }
