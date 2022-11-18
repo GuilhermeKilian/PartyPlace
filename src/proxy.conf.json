@@ -1,6 +1,6 @@
 {
-    "/googlemap": {
-    "target": "https://maps.googleapis.com",
+    "/api": {
+    "target": "http://localhost:3001",
     "secure": false
     }
 }

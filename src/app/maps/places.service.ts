@@ -12,16 +12,7 @@ export class PlacesService {
   constructor(private http: HttpClient) { }
 
    getPlace(address:string): Observable<PlacesObjectModel>{
-    return this.http.get<PlacesObjectModel>(
-      `googlemap/maps/api/place/findplacefromtext/json?input=${address}}&inputtype=textquery&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry`
-      , {
-        params: {
-          input: address,
-          inputtype: "textquery",
-          fields: "formatted_address,name,geometry",
-          key: environment.agmKey
-        }
-      });
+      return this.http.get<PlacesObjectModel>(`api/maps`, { params: { street: address } });
       
   }
 }

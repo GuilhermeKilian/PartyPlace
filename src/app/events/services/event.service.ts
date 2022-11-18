@@ -29,8 +29,8 @@ export class EventService {
   public createEvent(event:CreateEvent):void{
     this.place.getPlace(event.address).subscribe(place => {
       debugger;
-      event.latitude = place.candidates[0].geometry.lat;
-      event.longitude = place.candidates[0].geometry.lng;
+      event.latitude = place.candidates[0].geometry.location.lat;
+      event.longitude = place.candidates[0].geometry.location.lng;
       this.db.list('event').push(event);
     })
   }
