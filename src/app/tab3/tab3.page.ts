@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { EventService } from '../events/services/event.service';
-import { Event } from '../events/models/event'
+import { EventModel } from '../events/models/event'
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { SnapshotAction } from '@angular/fire/compat/database';
 
@@ -20,7 +20,7 @@ export interface EventForm{
 })
 export class Tab3Page {
 
-  events: Observable<SnapshotAction<Event>[]>;
+  events: Observable<SnapshotAction<EventModel>[]>;
   form:FormGroup<EventForm>;
   update:FormGroup<EventForm>;
 
@@ -52,7 +52,7 @@ export class Tab3Page {
     })
   }
 
-  populateUpdateForm(eventForm:Event, key:string):void{
+  populateUpdateForm(eventForm:EventModel, key:string):void{
     this.update = this.formBuilder.group<EventForm>({
       address: new FormControl(eventForm.address, {nonNullable: true}),
       details: new FormControl(eventForm.details, {nonNullable: false}),
@@ -61,8 +61,8 @@ export class Tab3Page {
     })  
   }
 
-  private convertFormToEvent(eventForm:FormGroup<EventForm>):Event{
-    let event: Event = new Event();
+  private convertFormToEvent(eventForm:FormGroup<EventForm>):EventModel{
+    let event: EventModel = new EventModel();
     event.name = eventForm.value.name;
     event.address = eventForm.value.address;
     event.details = eventForm.value.details;

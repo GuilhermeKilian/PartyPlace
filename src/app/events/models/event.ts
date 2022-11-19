@@ -1,4 +1,4 @@
-export class Event {
+export class EventModel {
     key: string;
     name: string;
     longitude: number;

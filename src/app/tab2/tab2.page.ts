@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { GoogleMap } from '@capacitor/google-maps';
-import { PlacesService } from '../maps/places.service';
+import { EventModel } from '../events/models/event';
 import { MapsService } from '../maps/services/maps.service';
 
 @Component({
@@ -12,17 +12,18 @@ import { MapsService } from '../maps/services/maps.service';
 export class Tab2Page {
     newMap: GoogleMap;
 
-    constructor(private maps:MapsService, private places:PlacesService) {}
+    constructor(public maps:MapsService) {}
 
     ngOnInit(): void{
         this.summonMap();
         this.putMarkers();
+        this.maps.event = new EventModel;
     }
     async summonMap(){
       this.newMap = await this.maps.createMap('map')
     }
 
     async putMarkers(){
-      this.maps.addMarkers();
+      await this.maps.addMarkers();
     }
 }
