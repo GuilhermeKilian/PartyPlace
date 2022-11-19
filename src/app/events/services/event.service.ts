@@ -15,6 +15,25 @@ export class EventService {
 
   constructor(private db:AngularFireDatabase, private place: PlacesService) {}
 
+  public getSavedEvents():Observable<EventModel[]>{
+    return this.db.list<EventModel>('saved').valueChanges();      
+  }
+
+  public saveEvent(event:EventModel){
+    this.db.list<EventModel>('saved').push(event);
+  }
+
+  public deleteSaveEvent(key:string):void{
+    this.db.object(`saved`).query.orderByChild('key').equalTo(key).limitToFirst(1).get().then(event => {
+      let keys = Object.keys(event.val())
+      this.db.object(`saved/${keys[0]}`).remove();
+    });
+  }
+
+  public getSavedEventByKeyAndName(uid:string, keyEvent:string):Promise<DataSnapshot>{    
+    return this.db.object<EventModel>(`saved`).query.orderByChild('key').equalTo(keyEvent).limitToFirst(1).get()
+  }
+
   public getAllEvents():Observable<EventModel[]>{
     return this.db.list<EventModel>('event').valueChanges();      
   }

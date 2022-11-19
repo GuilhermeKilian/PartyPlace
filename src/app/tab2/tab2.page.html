@@ -30,6 +30,7 @@
           <p>
             {{maps.event.details}}            
           </p>
+          <ion-button (click)="maps.toggleSaveEvent(maps.event)">{{maps.currentEventSaved ? 'Remover' : 'Salvar'}}</ion-button>
         </ion-content>
       </ng-template>
     </ion-modal>

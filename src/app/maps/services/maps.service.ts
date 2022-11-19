@@ -4,10 +4,6 @@ import { GoogleMap, Marker } from '@capacitor/google-maps';
 import { Geolocation, Geoposition } from '@awesome-cordova-plugins/geolocation/ngx';
 import { EventService } from 'src/app/events/services/event.service';
 import { EventModel } from '../../events/models/event'
-import { HTTP } from '@awesome-cordova-plugins/http/ngx';
-import { HttpResponse } from '@capacitor/core';
-import { HTTPResponse } from '@awesome-cordova-plugins/http';
-import { MarkerClickCallbackData } from '@capacitor/google-maps/dist/typings/definitions';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +12,7 @@ import { MarkerClickCallbackData } from '@capacitor/google-maps/dist/typings/def
 export class MapsService {
   public event:EventModel;
   public isModalOpen:boolean = false;
+  public currentEventSaved = false;
   private maps: GoogleMap;
 
   constructor(private geolocation:Geolocation, private eventService:EventService) { }
@@ -40,7 +37,12 @@ export class MapsService {
     await this.maps.setOnMarkerClickListener((data) => {
       this.eventService.getEventByName(data.title).then(value => {      
         value.forEach(v => {
-          this.event = <EventModel>v.val()
+          this.event = <EventModel>v.val();;
+          this.event.key = v.key;
+          this.eventService.getSavedEventByKeyAndName(this.event.name, this.event.key).then(event => {
+            if(event.exists())
+              this.currentEventSaved = true;
+          })
         })
       })
       this.setOpen(true);
@@ -67,6 +69,19 @@ export class MapsService {
       })
       this.maps.addMarkers(markers);
     });
+  }
+
+  toggleSaveEvent(event:EventModel){
+    if(this.currentEventSaved)
+      this.eventService.deleteSaveEvent(event.key);
+    else
+      this.eventService.saveEvent(event);
+
+    this.currentEventSaved = !this.currentEventSaved;
+  }
+
+  removeEvent(event:EventModel){
+    this.currentEventSaved = false;
   }
 
   setOpen(isOpen: boolean) {
