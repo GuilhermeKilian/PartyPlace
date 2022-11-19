@@ -33,25 +33,39 @@
     <ion-row>
       <ion-col *ngFor="let event of events | async">
         <p>{{event.payload.val().name}}</p>
-        <ion-button (click)='populateUpdateForm(event.payload.val(), event.key)'>edit</ion-button>
+        <ion-button (click)="setOpen(true)" (click)='populateUpdateForm(event.payload.val(), event.key)'>Edit</ion-button>
         <ion-button (click)='deleteEvent(event.key)'>Remover</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
 
-  <form [formGroup]="this.update" (ngSubmit)="updateEvent(this.update)">
-    <ion-item>
-      <ion-label>Nome</ion-label>
-      <ion-input type="text" formControlName="name"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Endereço</ion-label>
-      <ion-input type="text" formControlName="address"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Detalhes</ion-label>
-      <ion-textarea formControlName="details"></ion-textarea>
-    </ion-item>
-    <ion-button ion-button type="submit" [disabled]="!form.valid">Salvar</ion-button>
-  </form>
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Editar</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setOpen(false)">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <form [formGroup]="this.update" (ngSubmit)="updateEvent(this.update)">
+          <ion-item>
+            <ion-label>Nome</ion-label>
+            <ion-input type="text" formControlName="name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Endereço</ion-label>
+            <ion-input type="text" formControlName="address"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Detalhes</ion-label>
+            <ion-textarea formControlName="details"></ion-textarea>
+          </ion-item>
+          <ion-button ion-button type="submit" [disabled]="!form.valid">Salvar</ion-button>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

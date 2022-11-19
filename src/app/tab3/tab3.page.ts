@@ -19,10 +19,10 @@ export interface EventForm{
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
-
   events: Observable<SnapshotAction<EventModel>[]>;
   form:FormGroup<EventForm>;
   update:FormGroup<EventForm>;
+  isModalOpen = false;
 
   constructor(private eventService:EventService, private formBuilder: FormBuilder) {
     this.events = eventService.getPersonalEvents();
@@ -37,6 +37,7 @@ export class Tab3Page {
 
   updateEvent(event:FormGroup<EventForm>){
     this.eventService.updateEvent(event.value.key, this.convertFormToEvent(event));
+    this.setOpen(false);
   }
 
   deleteEvent(key:string){
@@ -67,5 +68,9 @@ export class Tab3Page {
     event.address = eventForm.value.address;
     event.details = eventForm.value.details;
     return event;
+  }
+
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
   }
 }
