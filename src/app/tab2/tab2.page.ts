@@ -15,8 +15,7 @@ export class Tab2Page {
     constructor(public maps:MapsService) {}
 
     ngOnInit(): void{
-        this.summonMap();
-        this.putMarkers();
+        this.summonMap().then(() => this.putMarkers());
         this.maps.event = new EventModel;
     }
     async summonMap(){
