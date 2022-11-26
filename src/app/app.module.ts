@@ -10,6 +10,8 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from 'src/environments/environment';
 import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -18,6 +20,9 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule, 
     HttpClientModule,
     IonicModule.forRoot(), 
+    IonicModule,
+    CommonModule,
+    FormsModule,
     AppRoutingModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
