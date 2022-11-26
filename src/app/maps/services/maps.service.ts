@@ -37,7 +37,7 @@ export class MapsService {
     await this.maps.setOnMarkerClickListener((data) => {
       this.eventService.getEventByName(data.title).then(value => {      
         value.forEach(v => {
-          this.event = <EventModel>v.val();;
+          this.event = <EventModel>v.val();
           this.event.key = v.key;
           this.eventService.getSavedEventByKeyAndName(this.event.name, this.event.key).then(event => {
             if(event.exists())
@@ -65,7 +65,6 @@ export class MapsService {
           //iconUrl: "https://i.pinimg.com/736x/a7/55/21/a7552158fd78bc1caac20e1a1a4569f6.jpg"
         };
         markers.push(marker);
-        // this.maps.addMarker(marker);
       })
       this.maps.addMarkers(markers);
     });

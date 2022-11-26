@@ -1,7 +1,6 @@
 import { AuthService } from '../auth/services/auth.service';
 import { User } from '../auth/models/user';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSlides } from '@ionic/angular';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -10,47 +9,33 @@ import { IonSlides } from '@ionic/angular';
 })
 
 export class LoginPage implements OnInit {
-  @ViewChild('slides') slides: IonSlides;
+  @ViewChild('slides') slides: ElementRef;
   public wavesPosition: number = 0;
   public wavesDifference: number = 80;
-  public userLogin: User = {
-    uid: '',
-    email: '',
-    displayName: ''
-  };  //iniciar o User como um objeto vazio
-  public userRegister: User = {
-    uid: '',
-    email: '',
-    displayName: ''
-  };
-  AuthService: any;
+  public userLogin: User;
+  public userRegister: User;
 
-  constructor(
-    public authService: AuthService ) { }
+  constructor(private authService: AuthService ) { }
 
   ngOnInit() {
+    this.userLogin = { uid: '', email: '', password: '', }
+    this.userRegister = { uid: '', email: '', password: '', }
   }
 
-
-    slideOpts = {
-      initialSlide: 1,
-      speed: 400
-    };
-
   segmentChanged(event: any) {
-
+    debugger;
     if (event.detail.value === "login") {
-      this.slides.slidePrev();
+      this.slides.nativeElement.slidePrev();
       this.wavesPosition += this.wavesDifference;
     } else {
-      this.slides.slideNext();
+      this.slides.nativeElement.slideNext();
       this.wavesPosition -= this.wavesDifference;
     }
   }
 
   async login(){
     try{
-    await this.AuthService.login(this.userLogin);
+    await this.authService.logIn(this.userLogin.email, this.userLogin.password);
   } catch(error){
     console.error(error);
   }
@@ -58,7 +43,7 @@ export class LoginPage implements OnInit {
 
   async register(){
     try{
-      await this.AuthService.register(this.userRegister);
+      await this.authService.createUser(this.userRegister.email, this.userRegister.password);
     }catch(error){
     console.error(error);
     }

@@ -30,8 +30,8 @@ export class Tab3Page {
     this.update = this.initializeForm();
   }
 
-  async create(event:FormGroup){
-    await this.eventService.createEvent(event.value);
+  create(event:FormGroup){
+    this.eventService.createEvent(event.value);
     this.form = this.initializeForm();
   }
 

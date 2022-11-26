@@ -93,16 +93,4 @@ export class EventService {
   public deleteEvent(key:string):void{
     this.db.object(`event/${key}`).remove();
   }
-
-  private convertToEvent(snap: SnapshotAction<EventModel>): EventModel{
-    let event:EventModel = new EventModel();
-    const values = snap.payload.val();
-      event.address = values.address;
-      event.details = values.details;
-      event.key = snap.key;
-      event.latitude = values.latitude;
-      event.longitude = values.longitude;
-      event.name = values.name;
-      return event;
-  }
 }
