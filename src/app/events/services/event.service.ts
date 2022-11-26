@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, SnapshotAction } from '@angular/fire/compat/database';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { EventModel } from '../models/event'
 import { CreateEvent } from '../models/createEvent';
-import { PlacesService } from '../../maps/services/places.service'
 import { DataSnapshot } from '@angular/fire/compat/database/interfaces';
+import { environment } from 'src/environments/environment';
+import { get } from 'scriptjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,15 @@ import { DataSnapshot } from '@angular/fire/compat/database/interfaces';
 
 export class EventService {
 
-  constructor(private db:AngularFireDatabase, private place: PlacesService) {}
+  html:HTMLDivElement;
+  placeService:google.maps.places.PlacesService;
+
+  constructor(private db:AngularFireDatabase) {
+    get(`https://maps.googleapis.com/maps/api/js?key=${environment.agmKey}&libraries=places`, () => {
+      this.html = document.createElement('div') as HTMLDivElement;
+      this.placeService = new google.maps.places.PlacesService(this.html);
+     });
+  }
 
   public getSavedEvents():Observable<EventModel[]>{
     return this.db.list<EventModel>('saved').valueChanges();      
@@ -51,18 +59,34 @@ export class EventService {
   }
 
   public createEvent(event:CreateEvent):void{
-    this.place.getPlace(event.address).subscribe(place => {
-      event.latitude = place.candidates[0].geometry.location.lat;
-      event.longitude = place.candidates[0].geometry.location.lng;
-      this.db.list('event').push(event);
-    })
+
+    this.placeService.findPlaceFromQuery({
+      fields: [ "formatted_address", "name", "geometry" ] ,
+      query: event.address,
+      language: null,
+      locationBias: null,
+    }, (response, status) => {
+      if(status === google.maps.places.PlacesServiceStatus.OK){
+        event.latitude = response[0].geometry.location.lat();
+        event.longitude = response[0].geometry.location.lng();
+        this.db.list('event').push(event);
+      }        
+    });
   }
 
   public updateEvent(key:string, event:CreateEvent):void{
-    this.place.getPlace(event.address).subscribe(place => {
-      event.latitude = place.candidates[0].geometry.location.lat;
-      event.longitude = place.candidates[0].geometry.location.lng;
-      this.db.list('event').update(key, event);
+
+    this.placeService.findPlaceFromQuery({
+      fields: [ "formatted_address", "name", "geometry" ] ,
+      query: event.address,
+      language: null,
+      locationBias: null,
+    }, (response, status) => {
+      if(status === google.maps.places.PlacesServiceStatus.OK){
+        event.latitude = response[0].geometry.location.lat();
+        event.longitude = response[0].geometry.location.lng();
+        this.db.list('event').update(key, event);
+      }        
     })
   }
 
