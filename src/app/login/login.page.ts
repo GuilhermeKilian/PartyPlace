@@ -15,15 +15,15 @@ export class LoginPage implements OnInit {
   public userLogin: User;
   public userRegister: User;
 
-  constructor(private authService: AuthService ) { }
-
-  ngOnInit() {
+  constructor(private authService: AuthService ) {
     this.userLogin = { uid: '', email: '', password: '', }
     this.userRegister = { uid: '', email: '', password: '', }
   }
 
+  ngOnInit() {
+  }
+
   segmentChanged(event: any) {
-    debugger;
     if (event.detail.value === "login") {
       this.slides.nativeElement.slidePrev();
       this.wavesPosition += this.wavesDifference;
@@ -34,6 +34,7 @@ export class LoginPage implements OnInit {
   }
 
   async login(){
+    debugger;
     try{
     await this.authService.logIn(this.userLogin.email, this.userLogin.password);
   } catch(error){
