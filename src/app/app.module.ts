@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
     IonicModule.forRoot(), 
     IonicModule,
     CommonModule,
+    ReactiveFormsModule,
     FormsModule,
     AppRoutingModule,
     AngularFireAuthModule,

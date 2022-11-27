@@ -13,39 +13,30 @@
 
   <ion-slides #slides>
     <ion-slide>
-      <div class="slide-inner ion-padding">
+
+      <form class="slide-inner ion-padding" [formGroup]="formLogin" (ngSubmit)="login()">
         <span>Login</span>
-
         <ion-item class="ion-margin-top" lines="none">
-          <ion-input type="email" placeholder="E-mail" [(ngModel)]="userLogin.email"></ion-input>
+          <ion-input type="email" placeholder="E-mail" formControlName="email"></ion-input>
         </ion-item>
-
         <ion-item class="ion-margin-top" lines="none">
-          <ion-input type="password" placeholder="Senha" [(ngModel)]="userLogin.password"></ion-input>
+          <ion-input type="password" placeholder="Senha" formControlName="password"></ion-input>
         </ion-item>
-
-        <ion-button class="ion-margin-top" (click)="login()" color="light" expand="block">
-          Entrar
-        </ion-button>
-      </div>
+        <ion-button class="ion-margin-top" color="light" expand="block" ion-button type="submit" [disabled]="!formLogin.valid">Entrar</ion-button>
+      </form>
     </ion-slide>
 
     <ion-slide>
-      <div class="slide-inner ion-padding">
+      <form class="slide-inner ion-padding" [formGroup]="formRegister" (ngSubmit)="register()">
         <span>Cadastro</span>
-
         <ion-item class="ion-margin-top" lines="none">
-          <ion-input type="email" placeholder="E-mail" [(ngModel)]="userRegister.email"></ion-input>
+          <ion-input type="email" placeholder="E-mail" formControlName="email"></ion-input>
         </ion-item>
-
         <ion-item class="ion-margin-top" lines="none">
-          <ion-input type="password" placeholder="Senha" [(ngModel)]="userRegister.password"></ion-input>
+          <ion-input type="password" placeholder="Senha" formControlName="password"></ion-input>
         </ion-item>
-
-        <ion-button class="ion-margin-top" (click)="register()" color="light" expand="block">
-          Cadastrar
-        </ion-button>
-      </div>
+        <ion-button class="ion-margin-top" color="light" expand="block" ion-button type="submit" [disabled]="!formRegister.valid">Criar</ion-button>
+      </form>
     </ion-slide>
   </ion-slides>
 

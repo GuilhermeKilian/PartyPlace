@@ -9,14 +9,13 @@ import firebase from 'firebase/compat/app';
 })
 export class AuthService {
 
-  public userData:User;
+  public userData:any;
 
   constructor(private authService: AngularFireAuth, private router:Router) {
     this.authService.authState.subscribe((auth) => {
       if(auth){
-        debugger;
         this.parseFromFirebase(auth);
-        localStorage.setItem('user', this.toAny(auth))
+        localStorage.setItem('user', JSON.stringify(this.userData))
       }
       else{
         localStorage.setItem('user', null)
@@ -28,6 +27,7 @@ export class AuthService {
     await this.authService.signInWithEmailAndPassword(email, password).then(res => {
       this.parseFromFirebase(res.user);
       localStorage.setItem('user', JSON.stringify(this.userData));
+      this.router.navigate(['tabs/tab1']);
     })
   }
 
@@ -43,6 +43,7 @@ export class AuthService {
       await this.authService.createUserWithEmailAndPassword(email, password).then(res => {
         this.parseFromFirebase(res.user);
         localStorage.setItem('user', JSON.stringify(this.userData));
+        this.router.navigate(['tabs/tab1']);
       });
   }
 
@@ -51,14 +52,8 @@ export class AuthService {
   }
 
   private parseFromFirebase(user: firebase.User){
+    this.userData = new User;
     this.userData.uid = user.uid;
     this.userData.email = user.email;
-}
-
-  private toAny(user:firebase.User):any{
-    return { 
-        uid: user.uid,
-        email: user.email,
-    }
-}
+  }
 }

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { ForceloginService } from './auth/services/forcelogin.service';
-import { LoginPage } from './login/login.page';
 
 const routes: Routes = [
   {
@@ -11,7 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'login',
-     component: LoginPage
+    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule),
   }
 ];
 @NgModule({
