@@ -4,6 +4,7 @@ import { EventService } from '../events/services/event.service';
 import { EventModel } from '../events/models/event'
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { SnapshotAction } from '@angular/fire/compat/database';
+import { AuthService } from '../auth/services/auth.service';
 
 
 export interface EventForm{
@@ -24,10 +25,14 @@ export class Tab3Page {
   update:FormGroup<EventForm>;
   isModalOpen = false;
 
-  constructor(private eventService:EventService, private formBuilder: FormBuilder) {
+  constructor(private eventService:EventService, private formBuilder: FormBuilder, private auth:AuthService) {
     this.events = eventService.getPersonalEvents();
     this.form = this.initializeForm();
     this.update = this.initializeForm();
+  }
+
+  async logout(){
+    await this.auth.logOut();
   }
 
   create(event:FormGroup){

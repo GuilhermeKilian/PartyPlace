@@ -1,8 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Cadastro
-    </ion-title>
+      Cadastro    
+    <ion-button style="float: right;" size="small" shape="round" color="light" (click)="logout()">
+      <ion-icon slot="icon-only" name="close"></ion-icon>
+    </ion-button>
+  </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -37,7 +40,7 @@
       {{event.payload.val().address}}
     </ion-card-content>  
     <ion-button (click)="setOpen(true)" (click)='populateUpdateForm(event.payload.val(), event.key)'>Edit</ion-button>
-    <ion-button (click)='deleteEvent(event.key)'>Remover</ion-button>
+    <ion-button (click)='deleteEvent(event.key)' color="danger">Remover</ion-button>
   </ion-card>
 
   <ion-modal [isOpen]="isModalOpen">
