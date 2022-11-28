@@ -41,6 +41,8 @@ export class MapsService {
           this.eventService.getSavedEventByKey(this.event.key).then(event => {
             if(event.exists())
               this.currentEventSaved = true;
+            else
+              this.currentEventSaved = false;
           })
         })
       })
