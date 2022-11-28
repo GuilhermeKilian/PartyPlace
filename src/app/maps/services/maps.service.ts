@@ -38,7 +38,6 @@ export class MapsService {
       this.eventService.getEventByName(data.title).then(value => {      
         value.forEach(v => {
           this.event = <EventModel>v.val();
-          this.event.key = v.key;
           this.eventService.getSavedEventByKey(this.event.key).then(event => {
             if(event.exists())
               this.currentEventSaved = true;
@@ -55,7 +54,6 @@ export class MapsService {
     this.eventService.getAllEvents().subscribe(res => {
       const markers:Marker[] = new Array<Marker>;
       res.forEach(event => {
-        debugger;
         let marker: Marker = {
           coordinate: {
             lat: parseFloat(event.latitude.toString()),

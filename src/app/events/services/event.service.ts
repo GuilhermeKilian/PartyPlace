@@ -27,39 +27,39 @@ export class EventService {
      });
   }
 
-  public getSavedEvents():Observable<EventModel[]>{
+  public getSavedEvents():Observable<EventModel[]> {
     return this.db.list<EventModel>(`saved/${this.user.uid}`).valueChanges();      
   }
 
-  public saveEvent(event:EventModel){
+  public saveEvent(event:EventModel) {
     this.db.list<EventModel>(`saved/${this.user.uid}`).push(event);
   }
 
-  public deleteSaveEvent(key:string):void{
+  public deleteSaveEvent(key:string):void {
     this.db.object(`saved/${this.user.uid}`).query.orderByChild('key').equalTo(key).limitToFirst(1).get().then(event => {
       let keys = Object.keys(event.val())
       this.db.object(`saved/${keys[0]}`).remove();
     });
   }
 
-  public getSavedEventByKey(keyEvent:string):Promise<DataSnapshot>{
+  public getSavedEventByKey(keyEvent:string):Promise<DataSnapshot> {
     return this.db.object<EventModel>(`saved/${this.user.uid}`).query.orderByChild('key').equalTo(keyEvent).limitToFirst(1).get()
   }
 
-  public getAllEvents():Observable<EventModel[]>{
-    return this.db.list<EventModel>('event').valueChanges();      
+  public getAllEvents():Observable<EventModel[]> {
+    return this.db.list<EventModel>('allevent').valueChanges();      
   }
 
-  public getPersonalEvents(): Observable<SnapshotAction<EventModel>[]>{
+  public getPersonalEvents(): Observable<SnapshotAction<EventModel>[]> {
     return this.db.list<EventModel>(`event/${this.user.uid}`).snapshotChanges();
   }
 
-  public getEventByKey(key:string):Observable<SnapshotAction<EventModel>>{
+  public getEventByKey(key:string):Observable<SnapshotAction<EventModel>> {
     return this.db.object<EventModel>(`event/${key}`).snapshotChanges()
   }
 
-  public getEventByName(name:string):Promise<DataSnapshot>{
-    return this.db.object<EventModel>(`event`).query.orderByChild('name').equalTo(name).get();
+  public getEventByName(name:string):Promise<DataSnapshot> {
+    return this.db.object<EventModel>(`allevent`).query.orderByChild('name').equalTo(name).limitToFirst(1).get();
   }
 
   public createEvent(event:CreateEvent):void{
@@ -72,13 +72,13 @@ export class EventService {
       if(status === google.maps.places.PlacesServiceStatus.OK){
         event.latitude = response[0].geometry.location.lat();
         event.longitude = response[0].geometry.location.lng();
-        this.db.list(`event/${this.user.uid}`).push(event);
+        let res = this.db.list(`event/${this.user.uid}`).push(event);
+        this.createAllEvent(res.key, event);
       }        
     });
   }
 
   public updateEvent(key:string, event:CreateEvent):void{
-    const user = this.auth.getUserData();
     this.placeService.findPlaceFromQuery({
       fields: [ "formatted_address", "name", "geometry" ] ,
       query: event.address,
@@ -89,11 +89,44 @@ export class EventService {
         event.latitude = response[0].geometry.location.lat();
         event.longitude = response[0].geometry.location.lng();
         this.db.list(`event/${this.user.uid}`).update(key, event);
+        this.updateAllEvent(key, event);
       }        
     })
   }
 
   public deleteEvent(key:string):void{
     this.db.object(`event/${this.user.uid}/${key}`).remove();
+    this.deleteAllEvent(key);
+  }
+
+  public createAllEvent(key:string, event:CreateEvent){
+    const e:EventModel = this.getEventModel(key, event);
+    this.db.list(`allevent`).push(e);
+  }
+
+  public updateAllEvent(key:string, event:CreateEvent){
+    const e:EventModel = this.getEventModel(key, event);
+    this.db.object(`allevent`).query.orderByChild('key').equalTo(key).limitToFirst(1).get().then(event => {
+      let keys = Object.keys(event.val())
+      this.db.object(`allevent/${keys[0]}`).update(e);
+    });
+  }
+
+  public deleteAllEvent(key:string){
+    this.db.object(`allevent`).query.orderByChild('key').equalTo(key).limitToFirst(1).get().then(event => {
+      let keys = Object.keys(event.val())
+      this.db.object(`allevent/${keys[0]}`).remove();
+    });
+  }
+
+  private getEventModel(key:string, event:CreateEvent){
+    return {
+      address: event.address,
+      details: event.details,
+      key: key,
+      latitude: event.latitude,
+      longitude:event.longitude,
+      name: event.name
+    }
   }
 }
