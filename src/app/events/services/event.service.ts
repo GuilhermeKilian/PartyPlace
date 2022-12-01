@@ -40,7 +40,7 @@ export class EventService {
     this.loadUser();
     this.db.object(`saved/${this.user.uid}`).query.orderByChild('key').equalTo(key).limitToFirst(1).get().then(event => {
       let keys = Object.keys(event.val())
-      this.db.object(`saved/${keys[0]}`).remove();
+      this.db.object(`saved/${this.user.uid}/${keys[0]}`).remove();
     });
   }
 

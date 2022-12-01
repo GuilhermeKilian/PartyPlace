@@ -72,8 +72,9 @@ export class MapsService {
   }
 
   toggleSaveEvent(event:EventModel){
-    if(this.currentEventSaved)
+    if(this.currentEventSaved){
       this.eventService.deleteSaveEvent(event.key);
+    }
     else
       this.eventService.saveEvent(event);
 
